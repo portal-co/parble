@@ -18,7 +18,11 @@ pub fn parble(buffer: &mut [u8], mut hide_import: impl FnMut(&mut [u8])) {
     }
     for hide in to_hide {
         let offset = hide as usize;
-        let mut slice = &mut buffer[offset..offset + 1];
+        let mut zero_pos = offset;
+        while zero_pos < buffer.len() && buffer[zero_pos] != 0 {
+            zero_pos += 1;
+        }
+        let mut slice = &mut buffer[offset..zero_pos];
         hide_import(&mut slice);
     }
 }
